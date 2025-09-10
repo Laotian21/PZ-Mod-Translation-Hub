@@ -85,5 +85,6 @@
     - 中文独有 (cn_only.txt): 0 条 (增量)
     -> 正在尝试从 Git 历史记录中获取旧版本: data/output_files/TLOUClothingConnected_3348036710/EN_todo.txt
       --> 在 Git 历史记录中未找到该文件，视为全新。
+    -> 基线日志已存档到: data/logs/archive/TLOUClothingConnected_3348036710_baseline_run_20250910_173048.json
 
 处理成功！所有输出文件已保存在 'TLOUClothingConnected_3348036710' 文件夹中。

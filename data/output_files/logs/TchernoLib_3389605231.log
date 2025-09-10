@@ -34,5 +34,6 @@
     - 中文独有 (cn_only.txt): 0 条 (增量)
     -> 正在尝试从 Git 历史记录中获取旧版本: data/output_files/TchernoLib_3389605231/EN_todo.txt
       --> 在 Git 历史记录中未找到该文件，视为全新。
+    -> 基线日志已存档到: data/logs/archive/TchernoLib_3389605231_baseline_run_20250910_173048.json
 
 处理成功！所有输出文件已保存在 'TchernoLib_3389605231' 文件夹中。
