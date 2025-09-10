@@ -1,8 +1,0 @@
-module Base {
-	model Armband_Ground
-	{
-		mesh = Static/Clothes/Armband_Ground,
-	}
-	
-	
-}

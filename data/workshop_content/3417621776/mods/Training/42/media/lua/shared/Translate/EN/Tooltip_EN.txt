@@ -1,3 +1,0 @@
-Tooltip_EN = {
-    Tooltip_craft_traingTargetCan = "Build a training target can, fill it with empty cans and<br> shoot them to increase your aiming skills.",
-}

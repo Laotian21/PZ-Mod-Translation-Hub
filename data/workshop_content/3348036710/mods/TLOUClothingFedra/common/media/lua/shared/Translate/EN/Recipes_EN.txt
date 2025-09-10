@@ -1,4 +1,0 @@
-RecipesEN {
-   	PutFilterOnFEDRAGasMask = "Put Filter On FEDRA Gas Mask",
-	PutFilterOnWornFEDRAGasMask = "Put Filter On Worn FEDRA Gas Mask",
-}
