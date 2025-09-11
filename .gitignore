@@ -2,6 +2,5 @@ data/*
 
 !data/output_files/
 !data/completed_files/
-!data/workshop_content/
 
 data/output_files/logs/
