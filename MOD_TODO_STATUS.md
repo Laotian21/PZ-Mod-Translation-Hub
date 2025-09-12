@@ -2,7 +2,7 @@
 
 *此页面展示了当前所有已支持 Mod 的待办翻译条目数量。*
 
-*最后更新于：`2025-09-12 12:16:25 UTC+08:00`*
+*最后更新于：`2025-09-12 22:21:52 UTC+08:00`*
 
 ---
 
@@ -34,8 +34,10 @@
 | organizedCategoriesCore | 3370707195 | 254 |
 | SpongieOpenJackets | 2812326159 | 243 |
 | Advanced_Trajectory's_Realistic_Overhaul | 3036878362 | 238 |
+| lgd_antibodies | 2392676812 | 230 |
 | B42_Rain's_Firearms_&_Gun_Parts | 3387222454 | 221 |
 | MoreDescriptionForTraits4166 | 2685168362 | 206 |
+| Dreams | 1945359259 | 191 |
 | Spongie_Hair | 2463184726 | 185 |
 | More_Traits | 1299328280 | 168 |
 | ATA_Petyarbuilt | 3403314193 | 155 |
@@ -49,6 +51,7 @@
 | Wallpapers | 2999595757 | 114 |
 | Vanilla_Clothing_Expansion | 3421271152 | 112 |
 | Tomb's_Goth_Hair | 3531765630 | 111 |
+| USMilitaryPack | 612100872 | 106 |
 | BanditsAddOptions | 3412682512 | 94 |
 | StandardizedVehicleUpgrades3Core | 3403490889 | 89 |
 | B42_Rain's_Pack_Your_Loot | 3490159683 | 88 |
@@ -59,6 +62,7 @@
 | ScavengingSkill_[B42] | 3407792640 | 69 |
 | Farming_Expansion | 3444499190 | 67 |
 | MoreItemInformation | 3494474677 | 67 |
+| SpearFishing | 3539114542 | 63 |
 | ModTemplate | 3026307069 | 62 |
 | A&M_New_Frontier | 3387569160 | 59 |
 | CustomWeight | 3391228479 | 58 |
@@ -68,6 +72,8 @@
 | ARTR_RFGP | 3397215647 | 51 |
 | KeepPerkLevel | 3314107094 | 48 |
 | LastPushTrait | 3028253067 | 46 |
+| Zombaroid | 3519916139 | 42 |
+| SmartHutch | 3556857572 | 41 |
 | CombatTraits | 3427091746 | 40 |
 | ReactiveSoundEvents | 2969551071 | 39 |
 | SoulFilchersBeautifyngTime | 2425267353 | 39 |
@@ -98,15 +104,18 @@
 | Bicycle | 3461415167 | 22 |
 | 86fordE150 | 2870394916 | 22 |
 | Night_Vision | 3470491629 | 21 |
+| ToughnessSkill | 3545533939 | 21 |
 | ClothesBOX | 2847911733 | 21 |
 | ahz_clothing_b42 | 3388910383 | 20 |
 | ClearingTime | 1926311864 | 20 |
+| AxesRecrafting | 2211423190 | 20 |
 | RandomClothing | 3397182976 | 20 |
 | doorsHaveAChance | 3041602364 | 17 |
 | Farming_Wiki | 3473886171 | 14 |
 | Zombies_Congelados_TWD_B42 | 3426132882 | 14 |
 | EFTBackpacks | 3432928943 | 13 |
 | MinimapStyleOptions | 3526517370 | 13 |
+| ExtendedSpices | 3522142755 | 12 |
 | Gunpoint_Redemption | 3078291265 | 11 |
 | Herbalist | 2875059598 | 11 |
 | DivisionBackpack | 3391306957 | 11 |
@@ -135,6 +144,7 @@
 | CraftableMannequins | 3054341059 | 5 |
 | [J&G]_Caution_Uniform | 3369825662 | 5 |
 | damnlib | 3171167894 | 5 |
+| H&K_VP70 | 2470321383 | 5 |
 | Vehicle_Repair_Overhaul | 2757712197 | 5 |
 | TheyAreWatching | 3559704439 | 5 |
 | GWH_(B42) | 3410972667 | 5 |
@@ -336,6 +346,7 @@
 | 86oshkoshP19A | 2566953935 | 0 |
 | Nep_High_Beams | 3438126404 | 0 |
 | Map_Symbol_Size_Slider | 2734705913 | 0 |
+| EasySpareMagazineReload | 2590662055 | 0 |
 | fhqwhgads'_Hot_Pursuit_Pack | 2841969842 | 0 |
 | 89trooper | 2932549988 | 0 |
 | Lucille | 3436159263 | 0 |
