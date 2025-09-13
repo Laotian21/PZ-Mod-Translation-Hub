@@ -3,6 +3,17 @@ name: Forward Public PR to Private Repo
 on:
   pull_request:
     types: [opened]
+  workflow_dispatch:
+    inputs:
+      pull_request_number:
+        description: '要重新转发的公开 PR 号码 (可选)'
+        required: false
+        type: number
+      force_rerun:
+        description: '即使未检测到更改也强制重新运行'
+        required: false
+        type: boolean
+        default: false
 
 env:
   PRIVATE_REPO_OWNER: "Laotian21"
@@ -15,35 +26,91 @@ jobs:
   forward_pr:
     runs-on: ubuntu-latest
     permissions:
-      pull-requests: write
       contents: read
+      pull-requests: write
 
     steps:
+      - name: Determine PR Info and set outputs
+        id: pr_info
+        run: |
+          # Ensure jq is installed for parsing JSON
+          sudo apt-get update && sudo apt-get install -y jq
+
+          PR_NUMBER_INPUT="${{ github.event.inputs.pull_request_number }}"
+          PUBLIC_REPO_FULL_NAME="${{ github.repository }}"
+
+          if [ -n "$PR_NUMBER_INPUT" ]; then
+            # workflow_dispatch (手动触发)
+            PR_NUMBER="$PR_NUMBER_INPUT"
+            echo "Workflow triggered manually for PR #$PR_NUMBER."
+
+            # 使用 gh CLI 获取 PR 详细信息
+            PR_JSON=$(gh pr view "$PR_NUMBER" --json number,title,body,url,author,baseRefName,headRefName,headRefOid,headRepositoryOwner,headRepository --repo "$PUBLIC_REPO_FULL_NAME")
+            
+            echo "PUBLIC_PR_NUMBER=$PR_NUMBER" >> "$GITHUB_OUTPUT"
+            echo "PUBLIC_PR_TITLE=$(echo "$PR_JSON" | jq -r .title)" >> "$GITHUB_OUTPUT"
+            echo "PUBLIC_PR_BODY=$(echo "$PR_JSON" | jq -r .body)" >> "$GITHUB_OUTPUT"
+            echo "PUBLIC_PR_URL=$(echo "$PR_JSON" | jq -r .url)" >> "$GITHUB_OUTPUT"
+            echo "PUBLIC_PR_AUTHOR=$(echo "$PR_JSON" | jq -r .author.login)" >> "$GITHUB_OUTPUT"
+            echo "PUBLIC_PR_BASE_REF=$(echo "$PR_JSON" | jq -r .baseRefName)" >> "$GITHUB_OUTPUT"
+            echo "PUBLIC_PR_HEAD_REF=$(echo "$PR_JSON" | jq -r .headRefName)" >> "$GITHUB_OUTPUT"
+            
+            HEAD_REPO_URL=$(echo "$PR_JSON" | jq -r '.headRepository.url')
+            if [ "$HEAD_REPO_URL" != "null" ]; then
+              echo "PUBLIC_PR_HEAD_REPO_URL=$HEAD_REPO_URL" >> "$GITHUB_OUTPUT"
+            else
+              HEAD_REPO_OWNER_LOGIN=$(echo "$PR_JSON" | jq -r '.headRepositoryOwner.login')
+              HEAD_REPO_NAME=$(echo "$PR_JSON" | jq -r '.headRepository.name')
+              echo "PUBLIC_PR_HEAD_REPO_URL=https://github.com/${HEAD_REPO_OWNER_LOGIN}/${HEAD_REPO_NAME}" >> "$GITHUB_OUTPUT"
+            fi
+
+            echo "PUBLIC_PR_HEAD_SHA=$(echo "$PR_JSON" | jq -r .headRefOid)" >> "$GITHUB_OUTPUT"
+            echo "TRIGGER_TYPE=manual" >> "$GITHUB_OUTPUT"
+          else
+            # pull_request (PR 打开时自动触发)
+            PR_NUMBER="${{ github.event.pull_request.number }}"
+            echo "Workflow triggered by pull_request event for PR #$PR_NUMBER."
+            
+            echo "PUBLIC_PR_NUMBER=$PR_NUMBER" >> "$GITHUB_OUTPUT"
+            echo "PUBLIC_PR_TITLE=${{ github.event.pull_request.title }}" >> "$GITHUB_OUTPUT"
+            echo "PUBLIC_PR_BODY=${{ github.event.pull_request.body }}" >> "$GITHUB_OUTPUT"
+            echo "PUBLIC_PR_URL=${{ github.event.pull_request.html_url }}" >> "$GITHUB_OUTPUT"
+            echo "PUBLIC_PR_AUTHOR=${{ github.event.pull_request.user.login }}" >> "$GITHUB_OUTPUT"
+            echo "PUBLIC_PR_BASE_REF=${{ github.event.pull_request.base.ref }}" >> "$GITHUB_OUTPUT"
+            echo "PUBLIC_PR_HEAD_REF=${{ github.event.pull_request.head.ref }}" >> "$GITHUB_OUTPUT"
+            echo "PUBLIC_PR_HEAD_REPO_URL=${{ github.event.pull_request.head.repo.clone_url }}" >> "$GITHUB_OUTPUT"
+            echo "PUBLIC_PR_HEAD_SHA=${{ github.event.pull_request.head.sha }}" >> "$GITHUB_OUTPUT"
+            echo "TRIGGER_TYPE=pull_request" >> "$GITHUB_OUTPUT"
+          fi
+          echo "NEW_PRIVATE_BRANCH=public-pr-${PR_NUMBER}" >> "$GITHUB_OUTPUT"
+        env:
+          GH_TOKEN: ${{ github.token }}
+
       - name: Checkout Public Repository's Base Branch
         uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.pull_request.base.ref }}
+          ref: ${{ steps.pr_info.outputs.PUBLIC_PR_BASE_REF }}
           fetch-depth: 0
 
       - name: Fetch Public PR Head
         run: |
           set -e
-          git remote add pr_head ${{ github.event.pull_request.head.repo.clone_url }}
-          git fetch pr_head ${{ github.event.pull_request.head.ref }}
+          git remote add pr_head ${{ steps.pr_info.outputs.PUBLIC_PR_HEAD_REPO_URL }}
+          git fetch pr_head ${{ steps.pr_info.outputs.PUBLIC_PR_HEAD_REF }}
 
       - name: Get Public PR Details and Prepare for Private Repo
         id: pr_details
         run: |
           set -e
-          PUBLIC_PR_NUMBER="${{ github.event.pull_request.number }}"
-          PUBLIC_PR_TITLE="${{ github.event.pull_request.title }}"
-          PUBLIC_PR_BODY="${{ github.event.pull_request.body }}"
-          PUBLIC_REPO_FULL_NAME="${{ github.repository }}"
-          PUBLIC_PR_URL="${{ github.event.pull_request.html_url }}"
-          PUBLIC_PR_AUTHOR="${{ github.event.pull_request.user.login }}"
-          NEW_PRIVATE_BRANCH="public-pr-${PUBLIC_PR_NUMBER}"
+          PUBLIC_PR_NUMBER="${{ steps.pr_info.outputs.PUBLIC_PR_NUMBER }}"
+          PUBLIC_PR_TITLE="${{ steps.pr_info.outputs.PUBLIC_PR_TITLE }}"
+          PUBLIC_PR_BODY="${{ steps.pr_info.outputs.PUBLIC_PR_BODY }}"
+          PUBLIC_REPO_FULL_NAME="${{ github.repository }}" # 这个依然使用 github.repository
+          PUBLIC_PR_URL="${{ steps.pr_info.outputs.PUBLIC_PR_URL }}"
+          PUBLIC_PR_AUTHOR="${{ steps.pr_info.outputs.PUBLIC_PR_AUTHOR }}"
+          NEW_PRIVATE_BRANCH="${{ steps.pr_info.outputs.NEW_PRIVATE_BRANCH }}"
 
-          MODIFIED_FOLDERS=$(git diff --name-only "origin/${{ github.event.pull_request.base.ref }}" "pr_head/${{ github.event.pull_request.head.ref }}" | \
+          MODIFIED_FOLDERS=$(git diff --name-only "origin/${{ steps.pr_info.outputs.PUBLIC_PR_BASE_REF }}" "pr_head/${{ steps.pr_info.outputs.PUBLIC_PR_HEAD_REF }}" | \
                              grep '^completed_files/' | cut -d'/' -f2 | sort -u)
 
           if [ -n "$MODIFIED_FOLDERS" ]; then
@@ -77,13 +144,26 @@ jobs:
         id: generate_patches
         run: |
           set -e
-          mkdir -p ../patches
-          git format-patch "origin/${{ github.event.pull_request.base.ref }}..pr_head/${{ github.event.pull_request.head.ref }}" -o ../patches
-          if [ -z "$(ls -A ../patches)" ]; then
-            echo "patches_generated=false" >> "$GITHUB_OUTPUT"
-          else
+          mkdir -p patches # <--- 将 ../patches 改为 patches
+          
+          git format-patch "origin/${{ steps.pr_info.outputs.PUBLIC_PR_BASE_REF }}..pr_head/${{ steps.pr_info.outputs.PUBLIC_PR_HEAD_REF }}" -o patches # <--- 将 ../patches 改为 patches
+          
+          if find patches -maxdepth 1 -name "*.patch" -print -quit | grep -q .; then # <--- 使用 find 命令进行更准确的检查
             echo "patches_generated=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "patches_generated=false" >> "$GITHUB_OUTPUT"
           fi
+
+      - name: Debug Secret Value (DO NOT LOG VALUE DIRECTLY)
+        run: |
+          if [ -z "$PRIVATE_REPO_TOKEN" ]; then
+            echo "::error::PRIVATE_REPO_TOKEN appears to be empty or unset. Please re-check the secret in repository settings."
+            exit 1
+          else
+            echo "PRIVATE_REPO_TOKEN is set (not empty)."
+          fi
+        env:
+          PRIVATE_REPO_TOKEN: ${{ secrets.PRIVATE_REPO_TOKEN }}
 
       - name: Setup Git and Clone Private Repo
         env:
@@ -94,38 +174,51 @@ jobs:
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git clone "https://x-access-token:${PRIVATE_REPO_TOKEN}@github.com/${{ env.PRIVATE_REPO_OWNER }}/${{ env.PRIVATE_REPO_NAME }}.git" private_clone
           cd private_clone
-          git checkout -b "${{ steps.pr_details.outputs.NEW_PRIVATE_BRANCH }}"
+          git checkout -b "${{ steps.pr_info.outputs.NEW_PRIVATE_BRANCH }}"
 
       - name: Apply Patches to Private Repo
         id: apply_patches
-        if: steps.generate_patches.outputs.patches_generated == 'true'
+        if: ${{ steps.generate_patches.outputs.patches_generated == 'true' || github.event.inputs.force_rerun == true }}
         working-directory: ./private_clone
         run: |
           set -e
-          if ! git am -3 --keep-non-patch --ignore-space-change ../patches/*.patch; then
-            echo "::error::无法自动应用补丁，存在冲突。"
-            git am --abort
-            git apply --reject ../patches/*.patch || true
-            git add .
+          # 只有在 patches_generated 为 true 时才尝试 git am
+          if [ "${{ steps.generate_patches.outputs.patches_generated }}" == "true" ]; then
+              if ! git am -3 --keep-non-patch --ignore-space-change ../patches/*.patch; then
+                echo "::error::无法自动应用补丁，存在冲突。"
+                git am --abort
+                git apply --reject ../patches/*.patch || true
+                git add .
 
-            git commit -m "[CONFLICT] 自动转发 PR #${{ steps.pr_details.outputs.PUBLIC_PR_NUMBER }}（包含 .rej 文件，需人工处理）"
-            git push origin "${{ steps.pr_details.outputs.NEW_PRIVATE_BRANCH }}"
-            echo "patches_applied=false" >> "$GITHUB_OUTPUT"
-            exit 0
+                git commit -m "[CONFLICT] 自动转发 PR #${{ steps.pr_info.outputs.PUBLIC_PR_NUMBER }}（包含 .rej 文件，需人工处理）"
+                git push origin "${{ steps.pr_info.outputs.NEW_PRIVATE_BRANCH }}"
+                echo "patches_applied=false" >> "$GITHUB_OUTPUT"
+                exit 0
+              fi
+              git push origin "${{ steps.pr_info.outputs.NEW_PRIVATE_BRANCH }}"
+              echo "patches_applied=true" >> "$GITHUB_OUTPUT"
+          else
+              echo "没有生成补丁文件，跳过补丁应用步骤。"
+              echo "patches_applied=false" >> "$GITHUB_OUTPUT" # 如果没有补丁，则视为未成功应用
+              if [ "${{ github.event.inputs.force_rerun }}" == "true" ]; then
+                echo "强制重新运行，但没有补丁生成。请检查源PR内容。"
+              fi
           fi
-          git push origin "${{ steps.pr_details.outputs.NEW_PRIVATE_BRANCH }}"
-          echo "patches_applied=true" >> "$GITHUB_OUTPUT"
+
 
       - name: Handle Failures and Create Conflict PR
-        if: success() && (steps.generate_patches.outputs.patches_generated == 'false' || steps.apply_patches.outputs.patches_applied == 'false')
+        if: success() && ((steps.generate_patches.outputs.patches_generated == 'false' && github.event.inputs.force_rerun != true) || steps.apply_patches.outputs.patches_applied == 'false')
         env:
-          # 用于在公开 PR 上评论
           GH_TOKEN: ${{ github.token }}
           PRIVATE_GH_TOKEN: ${{ secrets.PRIVATE_REPO_TOKEN }}
         run: |
           set -e
-          PUBLIC_PR_NUMBER="${{ steps.pr_details.outputs.PUBLIC_PR_NUMBER }}"
-          if [ "${{ steps.generate_patches.outputs.patches_generated }}" == "false" ]; then
+          PUBLIC_PR_NUMBER="${{ steps.pr_info.outputs.PUBLIC_PR_NUMBER }}"
+          PUBLIC_PR_TITLE="${{ steps.pr_info.outputs.PUBLIC_PR_TITLE }}"
+          PUBLIC_PR_URL="${{ steps.pr_info.outputs.PUBLIC_PR_URL }}"
+          NEW_PRIVATE_BRANCH="${{ steps.pr_info.outputs.NEW_PRIVATE_BRANCH }}"
+
+          if [ "${{ steps.generate_patches.outputs.patches_generated }}" == "false" ] && [ "${{ github.event.inputs.force_rerun }}" != "true" ]; then
             MESSAGE="📢 **自动化通知**: 您的 PR 中未检测到有效的文件更改。"
             gh pr comment "$PUBLIC_PR_NUMBER" --repo "${{ github.repository }}" --body "$MESSAGE"
           elif [ "${{ steps.apply_patches.outputs.patches_applied }}" == "false" ]; then
@@ -135,7 +228,7 @@ jobs:
             CONFLICT_PR_BODY=$(cat <<EOF
             ⚠️ **自动合并失败** ⚠️
 
-            此 PR 是从公开仓库的 [PR #${PUBLIC_PR_NUMBER}](${{ github.event.pull_request.html_url }}) 自动转发而来，但在应用补丁时遇到了合并冲突。
+            此 PR 是从公开仓库的 [PR #${PUBLIC_PR_NUMBER}](${PUBLIC_PR_URL}) 自动转发而来，但在应用补丁时遇到了合并冲突。
 
             **需要人工操作：**
             1.  请在此分支中手动解决冲突（注意检查 \`.rej\` 文件）。
@@ -145,9 +238,9 @@ jobs:
 
             GH_TOKEN=${PRIVATE_GH_TOKEN} gh pr create \
               --repo "${{ env.PRIVATE_REPO_OWNER }}/${{ env.PRIVATE_REPO_NAME }}" \
-              --head "${{ steps.pr_details.outputs.NEW_PRIVATE_BRANCH }}" \
+              --head "${NEW_PRIVATE_BRANCH}" \
               --base "${{ env.PRIVATE_REPO_BASE }}" \
-              --title "[CONFLICT] Forward Public PR #${PUBLIC_PR_NUMBER}: ${{ steps.pr_details.outputs.PUBLIC_PR_TITLE }}" \
+              --title "[CONFLICT] Forward Public PR #${PUBLIC_PR_NUMBER}: ${PUBLIC_PR_TITLE}" \
               --body "$CONFLICT_PR_BODY" \
               --reviewer "${{ env.DEFAULT_REVIEWERS }}" \
               --label "public-contribution" \
@@ -155,16 +248,16 @@ jobs:
           fi
 
       - name: Create Pull Request in Private Repo
-        if: success() && steps.generate_patches.outputs.patches_generated == 'true' && steps.apply_patches.outputs.patches_applied == 'true'
+        if: success() && steps.generate_patches.outputs.patches_generated == 'true' && steps.apply_patches.outputs.patches_applied == 'true' # **条件维持不变，确保只有成功应用补丁后才创建PR**
         env:
           GH_TOKEN: ${{ secrets.PRIVATE_REPO_TOKEN }}
         run: |
           set -e
           gh pr create \
             --repo "${{ env.PRIVATE_REPO_OWNER }}/${{ env.PRIVATE_REPO_NAME }}" \
-            --head "${{ steps.pr_details.outputs.NEW_PRIVATE_BRANCH }}" \
+            --head "${{ steps.pr_info.outputs.NEW_PRIVATE_BRANCH }}" \
             --base "${{ env.PRIVATE_REPO_BASE }}" \
-            --title "Forward Public PR #${{ steps.pr_details.outputs.PUBLIC_PR_NUMBER }}: ${{ steps.pr_details.outputs.PUBLIC_PR_TITLE }}" \
+            --title "Forward Public PR #${{ steps.pr_info.outputs.PUBLIC_PR_NUMBER }}: ${{ steps.pr_info.outputs.PUBLIC_PR_TITLE }}" \
             --body "$(cat <<'EOF'
           ${{ steps.pr_details.outputs.PRIVATE_PR_BODY }}
           EOF
