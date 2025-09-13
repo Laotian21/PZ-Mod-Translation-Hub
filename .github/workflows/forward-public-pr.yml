@@ -25,6 +25,7 @@ env:
 jobs:
   forward_pr:
     runs-on: ubuntu-latest
+    if: github.event.pull_request.head.repo.fork == false
     permissions:
       contents: read
       pull-requests: write
