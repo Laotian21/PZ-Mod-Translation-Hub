@@ -1768,7 +1768,7 @@ model FurPackGround
 		}
     }	
 
-	model HunterBox_Ground
+	model BoxOfPapers
     {
         mesh = WorldItems/HunterBox_Ground,
     	texture = WorldItems/BoxOfPapers,
@@ -2227,5 +2227,18 @@ model ChainmailMask_Ground
 		scale = 1.0,
 	}
 
+	model CoverPredator
+	{
+		mesh = WorldItems/CoverBlack,
+		texture = WorldItems/CoverPredator,
+		scale = 0.2,
+	}
+
+	model FabricRolled_PredatorCamo_Ground
+	{
+		mesh = WorldItems/FabricRolled_BlackCamo_Ground,
+		texture = WorldItems/FabricRolled_PredatorCamo,
+		scale = 0.14,
+	}
 
 }

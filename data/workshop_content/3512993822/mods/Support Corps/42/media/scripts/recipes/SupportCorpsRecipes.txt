@@ -645,7 +645,7 @@ craftRecipe SewCamoTShirt
     SkillRequired = Tailoring:1,
     inputs
     {
-        item 1 [SupportCorps.FabricRoll_BlackCamo;SupportCorps.FabricRoll_DesertCamo;SupportCorps.FabricRoll_ForeignCamo;SupportCorps.FabricRoll_GreenCamo;SupportCorps.FabricRoll_HuntingCamo;SupportCorps.FabricRoll_MilGreen;SupportCorps.FabricRoll_SnowCamo;SupportCorps.FabricRoll_TigerStripeCamo;SupportCorps.FabricRoll_UrbanCamo;] mappers[CamoTShirtType],
+        item 1 [SupportCorps.FabricRoll_BlackCamo;SupportCorps.FabricRoll_DesertCamo;SupportCorps.FabricRoll_ForeignCamo;SupportCorps.FabricRoll_GreenCamo;SupportCorps.FabricRoll_HuntingCamo;SupportCorps.FabricRoll_MilGreen;SupportCorps.FabricRoll_SnowCamo;SupportCorps.FabricRoll_TigerStripeCamo;SupportCorps.FabricRoll_UrbanCamo;SupportCorps.FabricRoll_PredatorCamo;] mappers[CamoTShirtType],
         item 1 [Base.ScissorsBluntMedical;Base.Scissors;] mode:keep,
         item 5 [Base.Thread;],
         item 1 [SupportCorps.SewingMachine;] mode:keep,
@@ -665,6 +665,7 @@ craftRecipe SewCamoTShirt
         SupportCorps.Tshirt_CamoSnow = SupportCorps.FabricRoll_SnowCamo,
         Base.Tshirt_CamoTigerStripe = SupportCorps.FabricRoll_TigerStripeCamo,
         Base.Tshirt_CamoUrban = SupportCorps.FabricRoll_UrbanCamo,
+        SupportCorps.Tshirt_CamoPredator = SupportCorps.FabricRoll_PredatorCamo,
     }
 }
 craftRecipe SewCamoShorts
@@ -705,7 +706,7 @@ craftRecipe SewCamoLongTShirt
     SkillRequired = Tailoring:1,
     inputs
     {
-        item 1 [SupportCorps.FabricRoll_BlackCamo;SupportCorps.FabricRoll_HuntingCamo;SupportCorps.FabricRoll_SnowCamo;] mappers[CamoLongType],
+        item 1 [SupportCorps.FabricRoll_BlackCamo;SupportCorps.FabricRoll_HuntingCamo;SupportCorps.FabricRoll_SnowCamo;SupportCorps.FabricRoll_PredatorCamo;] mappers[CamoLongType],
         item 1 [Base.ScissorsBluntMedical;Base.Scissors;] mode:keep,
         item 5 [Base.Thread;],
         item 1 [SupportCorps.SewingMachine;] mode:keep,
@@ -719,6 +720,7 @@ craftRecipe SewCamoLongTShirt
         SupportCorps.Tshirt_LongSleeve_BlackCamo = SupportCorps.FabricRoll_BlackCamo,
         Base.Tshirt_LongSleeve_HuntingCamo = SupportCorps.FabricRoll_HuntingCamo,
         SupportCorps.Tshirt_LongSleeve_SnowCamo = SupportCorps.FabricRoll_SnowCamo,
+        SupportCorps.Tshirt_LongSleeve_PredatorCamo = SupportCorps.FabricRoll_PredatorCamo,
     }
 }
 craftRecipe SewCamoParka
@@ -731,7 +733,7 @@ craftRecipe SewCamoParka
     SkillRequired = Tailoring:4,
     inputs
     {
-        item 2 [SupportCorps.FabricRoll_BlackCamo;SupportCorps.FabricRoll_DesertCamo;SupportCorps.FabricRoll_ForeignCamo;SupportCorps.FabricRoll_GreenCamo;SupportCorps.FabricRoll_HuntingCamo;SupportCorps.FabricRoll_MilGreen;SupportCorps.FabricRoll_SnowCamo;SupportCorps.FabricRoll_TigerStripeCamo;SupportCorps.FabricRoll_UrbanCamo;] mappers[CamoParkaType],
+        item 2 [SupportCorps.FabricRoll_BlackCamo;SupportCorps.FabricRoll_DesertCamo;SupportCorps.FabricRoll_ForeignCamo;SupportCorps.FabricRoll_GreenCamo;SupportCorps.FabricRoll_HuntingCamo;SupportCorps.FabricRoll_MilGreen;SupportCorps.FabricRoll_SnowCamo;SupportCorps.FabricRoll_TigerStripeCamo;SupportCorps.FabricRoll_UrbanCamo;SupportCorps.FabricRoll_PredatorCamo;] mappers[CamoParkaType],
         item 1 [Base.ScissorsBluntMedical;Base.Scissors;] mode:keep,
         item 7 [Base.Thread;],
         item 1 [SupportCorps.SewingMachine;] mode:keep,
@@ -751,6 +753,7 @@ craftRecipe SewCamoParka
         SupportCorps.Parka_SnowCamoDOWN = SupportCorps.FabricRoll_SnowCamo,
         SupportCorps.Parka_TigerStripeCamoDOWN = SupportCorps.FabricRoll_TigerStripeCamo,
         SupportCorps.Parka_UrbanCamoDOWN = SupportCorps.FabricRoll_UrbanCamo,
+        SupportCorps.Parka_PredatorCamoDOWN = SupportCorps.FabricRoll_PredatorCamo,
     }
 }
 craftRecipe SewCamoHoodie
@@ -763,7 +766,7 @@ craftRecipe SewCamoHoodie
     SkillRequired = Tailoring:3,
     inputs
     {
-        item 1 [SupportCorps.FabricRoll_BlackCamo;SupportCorps.FabricRoll_DesertCamo;SupportCorps.FabricRoll_ForeignCamo;SupportCorps.FabricRoll_GreenCamo;SupportCorps.FabricRoll_HuntingCamo;SupportCorps.FabricRoll_MilGreen;SupportCorps.FabricRoll_SnowCamo;SupportCorps.FabricRoll_TigerStripeCamo;SupportCorps.FabricRoll_UrbanCamo;] mappers[CamoHoodieType],
+        item 1 [SupportCorps.FabricRoll_BlackCamo;SupportCorps.FabricRoll_DesertCamo;SupportCorps.FabricRoll_ForeignCamo;SupportCorps.FabricRoll_GreenCamo;SupportCorps.FabricRoll_HuntingCamo;SupportCorps.FabricRoll_MilGreen;SupportCorps.FabricRoll_SnowCamo;SupportCorps.FabricRoll_TigerStripeCamo;SupportCorps.FabricRoll_UrbanCamo;SupportCorps.FabricRoll_PredatorCamo;] mappers[CamoHoodieType],
         item 1 [Base.ScissorsBluntMedical;Base.Scissors;] mode:keep,
         item 7 [Base.Thread;],
         item 1 [SupportCorps.SewingMachine;] mode:keep,
@@ -783,6 +786,7 @@ craftRecipe SewCamoHoodie
         SupportCorps.Hoodie_SnowCamo_DOWN = SupportCorps.FabricRoll_SnowCamo,
         SupportCorps.Hoodie_TigerStripeCamo_DOWN = SupportCorps.FabricRoll_TigerStripeCamo,
         SupportCorps.Hoodie_UrbanCamo_DOWN = SupportCorps.FabricRoll_UrbanCamo,
+        SupportCorps.Hoodie_PredatorCamo_DOWN = SupportCorps.FabricRoll_PredatorCamo,
     }
 }
 craftRecipe SewCamoBeanie
@@ -795,7 +799,7 @@ craftRecipe SewCamoBeanie
     SkillRequired = Tailoring:1,
     inputs
     {
-        item 1 [SupportCorps.FabricRoll_BlackCamo;SupportCorps.FabricRoll_DesertCamo;SupportCorps.FabricRoll_ForeignCamo;SupportCorps.FabricRoll_GreenCamo;SupportCorps.FabricRoll_HuntingCamo;SupportCorps.FabricRoll_MilGreen;SupportCorps.FabricRoll_SnowCamo;SupportCorps.FabricRoll_TigerStripeCamo;SupportCorps.FabricRoll_UrbanCamo;] mappers[CamoBeanieType],
+        item 1 [SupportCorps.FabricRoll_BlackCamo;SupportCorps.FabricRoll_DesertCamo;SupportCorps.FabricRoll_ForeignCamo;SupportCorps.FabricRoll_GreenCamo;SupportCorps.FabricRoll_HuntingCamo;SupportCorps.FabricRoll_MilGreen;SupportCorps.FabricRoll_SnowCamo;SupportCorps.FabricRoll_TigerStripeCamo;SupportCorps.FabricRoll_UrbanCamo;SupportCorps.FabricRoll_PredatorCamo;] mappers[CamoBeanieType],
         item 1 [Base.ScissorsBluntMedical;Base.Scissors;] mode:keep,
         item 2 [Base.Thread;],
         item 1 [SupportCorps.SewingMachine;] mode:keep,
@@ -815,6 +819,7 @@ craftRecipe SewCamoBeanie
         SupportCorps.Hat_BeanySnowCamo = SupportCorps.FabricRoll_SnowCamo,
         SupportCorps.Hat_BeanyTigerStripeCamo = SupportCorps.FabricRoll_TigerStripeCamo,
         SupportCorps.Hat_BeanyUrbanCamo = SupportCorps.FabricRoll_UrbanCamo,
+        SupportCorps.Hat_BeanyPredatorCamo = SupportCorps.FabricRoll_PredatorCamo,
     }
 }
 craftRecipe SewCamoGloves
@@ -827,7 +832,7 @@ craftRecipe SewCamoGloves
     SkillRequired = Tailoring:1,
     inputs
     {
-        item 1 [SupportCorps.FabricRoll_BlackCamo;SupportCorps.FabricRoll_DesertCamo;SupportCorps.FabricRoll_ForeignCamo;SupportCorps.FabricRoll_GreenCamo;SupportCorps.FabricRoll_HuntingCamo;SupportCorps.FabricRoll_MilGreen;SupportCorps.FabricRoll_SnowCamo;SupportCorps.FabricRoll_TigerStripeCamo;SupportCorps.FabricRoll_UrbanCamo;] mappers[CamoGlovesType],
+        item 1 [SupportCorps.FabricRoll_BlackCamo;SupportCorps.FabricRoll_DesertCamo;SupportCorps.FabricRoll_ForeignCamo;SupportCorps.FabricRoll_GreenCamo;SupportCorps.FabricRoll_HuntingCamo;SupportCorps.FabricRoll_MilGreen;SupportCorps.FabricRoll_SnowCamo;SupportCorps.FabricRoll_TigerStripeCamo;SupportCorps.FabricRoll_UrbanCamo;SupportCorps.FabricRoll_PredatorCamo;] mappers[CamoGlovesType],
         item 1 [Base.ScissorsBluntMedical;Base.Scissors;] mode:keep,
         item 2 [Base.Thread;],
         item 1 [SupportCorps.SewingMachine;] mode:keep,
@@ -847,6 +852,7 @@ craftRecipe SewCamoGloves
         SupportCorps.Gloves_SnowCamo = SupportCorps.FabricRoll_SnowCamo,
         SupportCorps.Gloves_TigerStripeCamo = SupportCorps.FabricRoll_TigerStripeCamo,
         SupportCorps.Gloves_UrbanCamo = SupportCorps.FabricRoll_UrbanCamo,
+        SupportCorps.Gloves_PredatorCamo = SupportCorps.FabricRoll_PredatorCamo,
     }
 }
 craftRecipe SewCamoShirt
@@ -887,7 +893,7 @@ craftRecipe SewCamoJacket
     SkillRequired = Tailoring:1,
     inputs
     {
-        item 1 [SupportCorps.FabricRoll_BlackCamo;SupportCorps.FabricRoll_DesertCamo;SupportCorps.FabricRoll_ForeignCamo;SupportCorps.FabricRoll_GreenCamo;SupportCorps.FabricRoll_HuntingCamo;SupportCorps.FabricRoll_MilGreen;SupportCorps.FabricRoll_SnowCamo;SupportCorps.FabricRoll_TigerStripeCamo;SupportCorps.FabricRoll_UrbanCamo;] mappers[CamoJacketType],
+        item 1 [SupportCorps.FabricRoll_BlackCamo;SupportCorps.FabricRoll_DesertCamo;SupportCorps.FabricRoll_ForeignCamo;SupportCorps.FabricRoll_GreenCamo;SupportCorps.FabricRoll_HuntingCamo;SupportCorps.FabricRoll_MilGreen;SupportCorps.FabricRoll_SnowCamo;SupportCorps.FabricRoll_TigerStripeCamo;SupportCorps.FabricRoll_UrbanCamo;SupportCorps.FabricRoll_PredatorCamo;] mappers[CamoJacketType],
         item 1 [Base.ScissorsBluntMedical;Base.Scissors;] mode:keep,
         item 5 [Base.Thread;],
         item 1 [SupportCorps.SewingMachine;] mode:keep,
@@ -906,6 +912,7 @@ craftRecipe SewCamoJacket
         SupportCorps.Jacket_ArmyCamoSnow = SupportCorps.FabricRoll_SnowCamo,
         Base.Jacket_ArmyCamoTigerStripe = SupportCorps.FabricRoll_TigerStripeCamo,
         Base.Jacket_ArmyCamoUrban = SupportCorps.FabricRoll_UrbanCamo,
+        SupportCorps.Jacket_ArmyCamoPredator = SupportCorps.FabricRoll_PredatorCamo,
     }
 }
 							craftRecipe SewMilitaryBoxer
@@ -987,7 +994,7 @@ craftRecipe SewVestCover
     xpAward = Tailoring:5,
     inputs
     {
-        item 1 [SupportCorps.FabricRoll_BlackCamo;SupportCorps.FabricRoll_DesertCamo;SupportCorps.FabricRoll_ForeignCamo;SupportCorps.FabricRoll_GreenCamo;SupportCorps.FabricRoll_HuntingCamo;SupportCorps.FabricRoll_MilGreen;SupportCorps.FabricRoll_SnowCamo;SupportCorps.FabricRoll_TigerStripeCamo;SupportCorps.FabricRoll_UrbanCamo;] mappers[CamoVestCoverType],
+        item 1 [SupportCorps.FabricRoll_BlackCamo;SupportCorps.FabricRoll_DesertCamo;SupportCorps.FabricRoll_ForeignCamo;SupportCorps.FabricRoll_GreenCamo;SupportCorps.FabricRoll_HuntingCamo;SupportCorps.FabricRoll_MilGreen;SupportCorps.FabricRoll_SnowCamo;SupportCorps.FabricRoll_TigerStripeCamo;SupportCorps.FabricRoll_UrbanCamo;SupportCorps.FabricRoll_PredatorCamo;] mappers[CamoVestCoverType],
         item 1 [Base.ScissorsBluntMedical;Base.Scissors;] mode:keep,
         item 1 [Base.Thread;],
         item 1 [SupportCorps.SewingMachine;] mode:keep,
@@ -1007,6 +1014,7 @@ craftRecipe SewVestCover
         SupportCorps.SnowVestCover = SupportCorps.FabricRoll_SnowCamo,
         SupportCorps.TigerStripeVestCover = SupportCorps.FabricRoll_TigerStripeCamo,
         SupportCorps.UrbanVestCover = SupportCorps.FabricRoll_UrbanCamo,
+        SupportCorps.PredatorVestCover = SupportCorps.FabricRoll_PredatorCamo,
     }
 }
 
@@ -1019,7 +1027,7 @@ craftRecipe SewHelmetCover
     xpAward = Tailoring:5,
     inputs
     {
-        item 1 [SupportCorps.FabricRoll_BlackCamo;SupportCorps.FabricRoll_DesertCamo;SupportCorps.FabricRoll_ForeignCamo;SupportCorps.FabricRoll_GreenCamo;SupportCorps.FabricRoll_HuntingCamo;SupportCorps.FabricRoll_MilGreen;SupportCorps.FabricRoll_SnowCamo;SupportCorps.FabricRoll_TigerStripeCamo;SupportCorps.FabricRoll_UrbanCamo;] mappers[CamoHelmetCoverType],
+        item 1 [SupportCorps.FabricRoll_BlackCamo;SupportCorps.FabricRoll_DesertCamo;SupportCorps.FabricRoll_ForeignCamo;SupportCorps.FabricRoll_GreenCamo;SupportCorps.FabricRoll_HuntingCamo;SupportCorps.FabricRoll_MilGreen;SupportCorps.FabricRoll_SnowCamo;SupportCorps.FabricRoll_TigerStripeCamo;SupportCorps.FabricRoll_UrbanCamo;SupportCorps.FabricRoll_PredatorCamo;] mappers[CamoHelmetCoverType],
         item 1 [Base.ScissorsBluntMedical;Base.Scissors;] mode:keep,
         item 1 [Base.Thread;],
         item 1 [SupportCorps.SewingMachine;] mode:keep,
@@ -1039,6 +1047,7 @@ craftRecipe SewHelmetCover
         SupportCorps.SnowHelmetCover = SupportCorps.FabricRoll_SnowCamo,
         SupportCorps.TigerStripeHelmetCover = SupportCorps.FabricRoll_TigerStripeCamo,
         SupportCorps.UrbanHelmetCover = SupportCorps.FabricRoll_UrbanCamo,
+        SupportCorps.PredatorHelmetCover = SupportCorps.FabricRoll_PredatorCamo,
     }
 }
 
@@ -1841,7 +1850,7 @@ craftRecipe SewHelmetCover
 		inputs
 		{
 			item 1 [SupportCorps.PowderedMilk;],
-			item 1 [SupportCorps.EmptyScoop;] mode:destroy,
+			item 1 [SupportCorps.EmptyScoop;SupportCorps.ScoopOfMilk;] mode:destroy,
 			item 1 [*],
 			-fluid 0.25 [Water],
 		}
@@ -9578,7 +9587,7 @@ craftRecipe EmptyGinWoodenKeg
 	inputs
 	{
 		item 1 [SupportCorps.SealedBeerLQ;SupportCorps.SealedMeadLQ;SupportCorps.SealedBerrywineLQ;SupportCorps.SealedWhiskeyLQ;SupportCorps.SealedVodkaLQ;SupportCorps.SealedGinLQ;SupportCorps.SealedWineLQ;SupportCorps.SealedWhiteWineLQ;] mappers[LQAlcoholType],
-        item 1 [Base.BottleOpener;Base.BottleOpener_Keychain;Base.Multitool;],
+        item 1 [Base.BottleOpener;Base.BottleOpener_Keychain;Base.Multitool;] mode:keep,
 	}
 
 	outputs
@@ -9610,7 +9619,7 @@ craftRecipe EmptyGinWoodenKeg
 	inputs
 	{
 		item 1 [SupportCorps.SealedBeer;SupportCorps.SealedMead;SupportCorps.SealedBerrywine;SupportCorps.SealedWhiskey;SupportCorps.SealedVodka;SupportCorps.SealedGin;SupportCorps.SealedWine;SupportCorps.SealedWhiteWine;] mappers[AlcoholType],
-        item 1 [Base.BottleOpener;Base.BottleOpener_Keychain;Base.Multitool;],
+        item 1 [Base.BottleOpener;Base.BottleOpener_Keychain;Base.Multitool;] mode:keep,
 	}
 
 	outputs
@@ -9642,7 +9651,7 @@ craftRecipe EmptyGinWoodenKeg
 	inputs
 	{
 		item 1 [SupportCorps.SealedBeerHQ;SupportCorps.SealedMeadHQ;SupportCorps.SealedBerrywineHQ;SupportCorps.SealedWhiskeyHQ;SupportCorps.SealedVodkaHQ;SupportCorps.SealedGinHQ;SupportCorps.SealedWineHQ;SupportCorps.SealedWhiteWineHQ;] mappers[HQAlcoholType],
-        item 1 [Base.BottleOpener;Base.BottleOpener_Keychain;Base.Multitool],
+        item 1 [Base.BottleOpener;Base.BottleOpener_Keychain;Base.Multitool] mode:keep,
 	}
 
 	outputs
@@ -9674,7 +9683,7 @@ craftRecipe EmptyGinWoodenKeg
 	inputs
 	{
 		item 1 [SupportCorps.SealedBeerWA;SupportCorps.SealedMeadWA;SupportCorps.SealedBerryWineWA;SupportCorps.SealedWhiskeyWA;SupportCorps.SealedVodkaWA;SupportCorps.SealedGinWA;SupportCorps.SealedRedWineWA;SupportCorps.SealedWhiteWineWA;] mappers[WAAlcoholType],
-        item 1 [Base.BottleOpener;Base.BottleOpener_Keychain;Base.Multitool;],
+        item 1 [Base.BottleOpener;Base.BottleOpener_Keychain;Base.Multitool;] mode:keep,
 	}
 
 	outputs
@@ -19115,7 +19124,7 @@ craftRecipe PackHoney
 
     inputs
     {
-        item 4 [Base.Honey;],
+        item 4 [Base.Honey;] mode:destroy flags[ItemCount],
 
     }
 
@@ -19157,7 +19166,7 @@ craftRecipe PackStrawberriesBox
 
     inputs
     {
-        item 10 [Base.Strewberrie;],
+        item 10 [Base.Strewberrie;] mode:destroy flags[ItemCount],
 
     }
 
@@ -19178,7 +19187,7 @@ craftRecipe PackHopsBox
 
     inputs
     {
-        item 10 [Base.Hops;],
+        item 10 [Base.Hops;] mode:destroy flags[ItemCount],
 
     }
 
@@ -19199,7 +19208,7 @@ craftRecipe PackSealedGrapesBox
 
     inputs
     {
-        item 10 [Base.Grapes;],
+        item 10 [Base.Grapes;] mode:destroy flags[ItemCount],
 
     }
 
@@ -19220,7 +19229,7 @@ craftRecipe PackSealedWhiteGrapesBox
 
     inputs
     {
-        item 10 [SupportCorps.WhiteGrapes;],
+        item 10 [SupportCorps.WhiteGrapes;] mode:destroy flags[ItemCount],
 
     }
 
@@ -19241,7 +19250,7 @@ craftRecipe PackSealedBarleySeedsBox
 
     inputs
     {
-        item 50 [Base.BarleySeed;],
+        item 50 [Base.BarleySeed;] mode:destroy flags[ItemCount],
 
     }
 
@@ -19262,7 +19271,7 @@ craftRecipe PackSealedWheatSeedsBox
 
     inputs
     {
-        item 50 [Base.WheatSeed;],
+        item 50 [Base.WheatSeed;] mode:destroy flags[ItemCount],
 
     }
 
@@ -19283,7 +19292,7 @@ craftRecipe PackSealedRyeSeedsBox
 
     inputs
     {
-        item 50 [Base.RyeSeed;],
+        item 50 [Base.RyeSeed;] mode:destroy flags[ItemCount],
 
     }
 
@@ -19304,7 +19313,7 @@ craftRecipe PackPotatoesBox
 
     inputs
     {
-        item 10 [Base.Potato;],
+        item 10 [Base.Potato;] mode:destroy flags[ItemCount],
 
     }
 
@@ -19742,7 +19751,7 @@ craftRecipe PackBucketBarley
 	inputs
 	{
 		item 1 [SupportCorps.CannedBeef;SupportCorps.CannedPork;SupportCorps.CannedMuttonChops;SupportCorps.CannedChickenFillet;SupportCorps.CannedWholeChicken;SupportCorps.CannedFishFillet;SupportCorps.CannedBerries;SupportCorps.CannedMushrooms;SupportCorps.CannedGroundBeef;SupportCorps.CannedSteak;SupportCorps.CannedVenison;SupportCorps.CannedSquirrel;SupportCorps.CannedTomatoSauce;SupportCorps.CannedEggs;SupportCorps.CannedSalami;SupportCorps.CannedSausage;SupportCorps.CannedSalmon;SupportCorps.CannedPumpkin;SupportCorps.CannedZucchini;SupportCorps.CannedEggplant;SupportCorps.CannedBellPeppers;SupportCorps.CannedGarlic;SupportCorps.CannedOnion;SupportCorps.CannedCabbage;SupportCorps.CannedRabbit;SupportCorps.CannedBread;SupportCorps.CannedStrawberry;SupportCorps.CannedPieFilling;SupportCorps.CannedShrimp;SupportCorps.CannedHam;SupportCorps.CannedSoybeans;SupportCorps.CannedWatermelon;SupportCorps.CannedBroccoli;SupportCorps.CannedHabenero;SupportCorps.CannedPickles;] mappers[NewCanType],
-        item 1 [Base.TinOpener;Base.TinOpener_Old;Base.Multitool;Base.P38;],
+        item 1 [Base.TinOpener;Base.TinOpener_Old;Base.Multitool;Base.P38;] mode:keep,
 	}
 
 	outputs
@@ -21949,7 +21958,7 @@ craftRecipe PasteurizeMilk
     inputs
     {
         item 1 [SupportCorps.PasturMachine;] mode:keep,
-        item 2 [SupportCorps.MilkBottle;],
+        item 2 [SupportCorps.MilkBottle;] mode:destroy,
         item 1 [*],
         -fluid 2.0 [CowMilk],
     }
@@ -21972,7 +21981,7 @@ craftRecipe PasteurizeSheepMilk
     inputs
     {
         item 1 [SupportCorps.PasturMachine;] mode:keep,
-        item 2 [SupportCorps.MilkBottle;],
+        item 2 [SupportCorps.MilkBottle;] mode:destroy,
         item 1 [*],
         -fluid 2.0 [SheepMilk],
     }

@@ -3428,7 +3428,7 @@ item LargeColaBottle
     DisplayName = Large Cola Bottle,
     DisplayCategory = Food,
     Type = Normal,
-    Weight = 2.0,
+    Weight = 0.1,
     Icon     = PopBottle,
     IconColorMask       = WaterBottle_Mask2,
     IconFluidMask       = PopBottle_Mask,
@@ -3439,7 +3439,7 @@ item LargeColaBottle
     FillFromLakeSound = GetWaterFromLakeLarge,
     FillFromTapSound = GetWaterFromTapMetalLarge,
     FillFromToiletSound = GetWaterFromToilet,
-    Tags = Cookable;HasPlastic;SealedBeverageBottle,
+    Tags = Cookable;HasPlastic;SealedBeverageCan,
 
         component FluidContainer
         {
@@ -3460,7 +3460,7 @@ item LargeDietColaBottle
     DisplayName = Large Diet Cola Bottle,
     DisplayCategory = Food,
     Type = Normal,
-    Weight = 2.0,
+    Weight = 0.1,
     Icon     = PopBottle,
     IconColorMask       = WaterBottle_Mask2,
     IconFluidMask       = PopBottle_Mask,
@@ -3471,7 +3471,7 @@ item LargeDietColaBottle
     FillFromLakeSound = GetWaterFromLakeLarge,
     FillFromTapSound = GetWaterFromTapMetalLarge,
     FillFromToiletSound = GetWaterFromToilet,
-    Tags = Cookable;HasPlastic;SealedBeverageBottle,
+    Tags = Cookable;HasPlastic;SealedBeverageCan,
 
         component FluidContainer
         {

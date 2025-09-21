@@ -5050,8 +5050,9 @@ item FoodBucketPreservatives
 {
     DisplayName         = Bucket of Food Preservatives,
     DisplayCategory     = Food,
-    Type                = Normal,
-    Weight              = 3,
+    Type                = Drainable,
+    UseDelta		= 0.1,
+    Weight              = 6,
     Icon                = FoodBucket,
     WorldStaticModel    = FoodBucketEmpty,
     Tags                = IgnoreZombieDensity,
