@@ -33,26 +33,48 @@ namespace PreProcessing
             string? currentDir = Path.GetDirectoryName(exePath);
 
             // 向上查找 translation_utils 目录
-            string? foundParent = null;
+            string? foundRepo = null;
             var repoDir = currentDir;
             while (!string.IsNullOrEmpty(repoDir))
             {
                 string candidate = Path.Combine(repoDir, "translation_utils");
                 if (Directory.Exists(candidate))
                 {
-                    foundParent = repoDir;
+                    foundRepo = repoDir;
                     break;
                 }
                 repoDir = Path.GetDirectoryName(repoDir);
             }
 
-            if (foundParent == null)
+            //如果无法通过exe路径获取repo目录，则尝试通过工作目录获取repo目录
+            //如果无法通过exe路径获取repo目录，则尝试通过工作目录获取repo目录
+            if (foundRepo == null)
+            {
+                // 获取当前工作目录
+                string workingDir = Directory.GetCurrentDirectory();
+                Console.WriteLine($"Working directory: {workingDir}");
+
+                // 从工作目录开始向上查找 translation_utils 目录
+                var searchDir = workingDir;
+                while (!string.IsNullOrEmpty(searchDir))
+                {
+                    string candidate = Path.Combine(searchDir, "translation_utils");
+                    if (Directory.Exists(candidate))
+                    {
+                        foundRepo = searchDir;
+                        break;
+                    }
+                    searchDir = Path.GetDirectoryName(searchDir);
+                }
+            }
+
+            if (foundRepo == null)
             {
                 throw new DirectoryNotFoundException("Error: directory not found <repo_dir>\translation_utils");
             }
 
             // 拼接 data\output_files 路径
-            string outputFilesPath = Path.Combine(foundParent, "data", "output_files");
+            string outputFilesPath = Path.Combine(foundRepo, "data", "output_files");
 
             // 检查目录是否存在
             if (!Directory.Exists(outputFilesPath))
@@ -100,7 +122,7 @@ namespace PreProcessing
                 errorCount += ExtractOldCNText(cnOldFilePath, modId);
 
                 //读取repoDir\data\completed_files\<modId>\en_completed.txt文件
-                string cnNewFilePath = Path.Combine(foundParent, "data", "completed_files", modId, "en_completed.txt");
+                string cnNewFilePath = Path.Combine(foundRepo, "data", "completed_files", modId, "en_completed.txt");
                 if (!File.Exists(cnNewFilePath))
                 {
                     Console.WriteLine($"::error file={cnNewFilePath}::Missing file");
@@ -111,7 +133,7 @@ namespace PreProcessing
             }
 
             //检查repoDir\data\translations_CN.txt是否存在，不存在则创建一个空文件
-            string outputTranslationFilePath = Path.Combine(foundParent, "data", "translations_CN.txt");
+            string outputTranslationFilePath = Path.Combine(foundRepo, "data", "translations_CN.txt");
             if (!File.Exists(outputTranslationFilePath))
             {
                 File.Create(outputTranslationFilePath).Close();
