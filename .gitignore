@@ -5,3 +5,4 @@ data/*
 !data/completed_files/
 
 data/output_files/logs/
+/.vs
