@@ -5,6 +5,9 @@ on:
     # 每天 UTC 时间 2 点自动执行
     - cron: "0 2 * * *"
   workflow_dispatch: # 支持手动触发
+  pull_request:
+    branches:
+      - main  # 当 PR 目标分支是 main 时触发
 
 jobs:
   run-preprocessing:
