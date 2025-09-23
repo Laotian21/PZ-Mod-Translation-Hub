@@ -172,6 +172,7 @@ namespace PreProcessing
                         tempComments.Clear();
                         modTranslationsCopy[currentModId][key] = entry;
                     }
+                    continue;
                 }
                 //是否是翻译文本行，格式为 <modId>::CN::<key> = "<originalText>",
                 var translationMatch1 = Regex.Match(line, @"^\t\t(?<modId>[^:]+)::CN::(?<key>[^=]+)=\s*""(?<text>.*)""\s*,?\S*");
@@ -190,6 +191,7 @@ namespace PreProcessing
                             modTranslationsCopy[currentModId][key] = entry;
                         }
                     }
+                    continue;
                 }
 
                 //是否是已翻译的原文行，格式为 <modId>::EN::<key> = "<originalText>",
@@ -224,6 +226,7 @@ namespace PreProcessing
                         }
                         modTranslationsCopy[currentModId][key] = entry;
                     }
+                    continue;
                 }
                 //是否是已翻翻译文本行，格式为 <modId>::CN::<key> = "<originalText>",
                 var translationMatch2 = Regex.Match(line, @"^(?<modId>[^:]+)::CN::(?<key>[^=]+)=\s*""(?<text>.*)""\s*,?\S*");
@@ -263,6 +266,10 @@ namespace PreProcessing
                     {
                         var entry = modTranslationsCopy[modId][key];
                         string prefix = entry.IsSChineseTranslated ? "" : "\t\t";
+                        if (entry.OriginalText.Equals("======Original Text Missing===="))
+                        {
+                            prefix = "\t";
+                        }
                         //写入注释
                         foreach (var comment in entry.Comment)
                         {
@@ -366,7 +373,7 @@ namespace PreProcessing
                         {
                             OriginalText = "======Original Text Missing====",
                             SChiinese = originalText,
-                            IsSChineseTranslated = false,
+                            IsSChineseTranslated = true,
                             Comment = new List<string>()
                         };
                         ModTranslations[modId][key] = entry;
