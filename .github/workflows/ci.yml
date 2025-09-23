@@ -1,0 +1,19 @@
+name: Scheduled and Manual CI
+
+on:
+  schedule:
+    # 每天 UTC 时间 2 点执行
+    - cron: "0 2 * * *"
+  workflow_dispatch: # 手动触发
+
+jobs:
+  run-preprocessing:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Run PreProcessing.exe
+        run: |
+          cd translation_utils
+          ./PreProcessing.exe

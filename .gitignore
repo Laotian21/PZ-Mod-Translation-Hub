@@ -6,3 +6,6 @@ data/*
 
 data/output_files/logs/
 /.vs
+/translation_utils/PreProcessing/.vs
+/translation_utils/PreProcessing/PreProcessing/bin
+/translation_utils/PreProcessing/PreProcessing/obj
