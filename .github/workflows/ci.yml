@@ -2,9 +2,9 @@ name: Scheduled and Manual CI
 
 on:
   schedule:
-    # 每天 UTC 时间 2 点执行
+    # 每天 UTC 时间 2 点自动执行
     - cron: "0 2 * * *"
-  workflow_dispatch: # 手动触发
+  workflow_dispatch: # 支持手动触发
 
 jobs:
   run-preprocessing:
@@ -13,7 +13,10 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Run PreProcessing.exe
-        run: |
-          cd translation_utils
-          ./PreProcessing.exe
+      - name: Setup .NET 9.0
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 9.0.x
+
+      - name: Run PreProcessing.dll
+        run: dotnet ./translation_utils/PreProcessing.dll
