@@ -19,4 +19,6 @@ jobs:
           dotnet-version: 9.0.x
 
       - name: Run PreProcessing.dll
-        run: dotnet ./translation_utils/PreProcessing.dll
+        run:
+            cd translation_utils
+            dotnet PreProcessing.dll
