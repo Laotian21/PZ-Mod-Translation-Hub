@@ -8,10 +8,13 @@ data/*
 
 data/output_files/logs/
 /.vs
-/translation_utils/PreProcessing/.vs
-/translation_utils/PreProcessing/PreProcessing/bin
-/translation_utils/PreProcessing/PreProcessing/obj
-/translation_utils/PostProcessing/.vs/PostProcessing/copilot-chat/3d97fec2/sessions
-/translation_utils/PostProcessing/.vs/PostProcessing
-/translation_utils/PostProcessing/PostProcessing/bin
-/translation_utils/PostProcessing/PostProcessing/obj
+
+/translation_utils/PreProcessing/*
+!/translation_utils/PreProcessing/PreProcessing.sln
+!/translation_utils/PreProcessing/PreProcessing/PostProcessing.csproj
+!/translation_utils/PreProcessing/PreProcessing/Program.cs
+
+/translation_utils/PostProcessing/*
+!/translation_utils/PostProcessing/PostProcessing.sln
+!/translation_utils/PostProcessing/PostProcessing/PostProcessing.csproj
+!/translation_utils/PostProcessing/PostProcessing/Program.cs
