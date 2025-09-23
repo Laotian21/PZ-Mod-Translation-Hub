@@ -273,7 +273,7 @@ namespace PreProcessing
                         //写入注释
                         foreach (var comment in entry.Comment)
                         {
-                            writer.WriteLine(prefix + comment);
+                            writer.WriteLine(prefix + comment.Trim());
                         }
                         //写入原文行
                         writer.WriteLine($"{prefix}{modId}::EN::{key} = \"{entry.OriginalText}\",");
