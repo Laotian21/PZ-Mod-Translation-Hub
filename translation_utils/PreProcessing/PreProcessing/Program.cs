@@ -505,8 +505,7 @@ namespace PreProcessing
                     errorCount++;
                 }
             }
-            return 0;
-            //return errorCount;
+            return errorCount;
         }
         static bool IsNullOrCommentLine(string line)
         {
