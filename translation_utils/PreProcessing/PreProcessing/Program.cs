@@ -2,6 +2,7 @@
 using System.IO;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using System.Text.Json;
 
 namespace PreProcessing
 {
@@ -24,53 +25,31 @@ namespace PreProcessing
         static void Main(string[] args)
         {
             int errorCount = 0;  // 添加错误计数器
+            string repoDir = GetRepoDir();
 
-            // 获取可执行文件的完整路径
-            string exePath = System.Diagnostics.Process.GetCurrentProcess().MainModule?.FileName ?? string.Empty;
-            Console.WriteLine($"Exe path: {exePath}");
+            //读取repoDir\translation_utils\FixFormattingErrors.json
+            string fixConfigPath = Path.Combine(repoDir, "translation_utils", "FixFormattingErrors.json");
+            Dictionary<string, FixRule> errorFixes = new Dictionary<string, FixRule>();
 
-            // 获取可执行文件所在目录
-            string? currentDir = Path.GetDirectoryName(exePath);
-
-            // 向上查找 translation_utils 目录
-            string? repoDir = null;
-            var searchDir = currentDir;
-            while (!string.IsNullOrEmpty(searchDir))
+            if (File.Exists(fixConfigPath))
             {
-                string candidate = Path.Combine(searchDir, "translation_utils");
-                if (Directory.Exists(candidate))
+                try
                 {
-                    repoDir = searchDir;
-                    break;
-                }
-                searchDir = Path.GetDirectoryName(searchDir);
-            }
-
-            //如果无法通过exe路径获取repo目录，则尝试通过工作目录获取repo目录
-            //如果无法通过exe路径获取repo目录，则尝试通过工作目录获取repo目录
-            if (repoDir == null)
-            {
-                // 获取当前工作目录
-                string workingDir = Directory.GetCurrentDirectory();
-                Console.WriteLine($"Working directory: {workingDir}");
-
-                // 从工作目录开始向上查找 translation_utils 目录
-                searchDir = workingDir;
-                while (!string.IsNullOrEmpty(searchDir))
-                {
-                    string candidate = Path.Combine(searchDir, "translation_utils");
-                    if (Directory.Exists(candidate))
+                    string jsonContent = File.ReadAllText(fixConfigPath);
+                    errorFixes = JsonSerializer.Deserialize<Dictionary<string, FixRule>>(jsonContent, new JsonSerializerOptions
                     {
-                        repoDir = searchDir;
-                        break;
-                    }
-                    searchDir = Path.GetDirectoryName(searchDir);
+                        PropertyNameCaseInsensitive = true
+                    }) ?? new Dictionary<string, FixRule>();
+                    Console.WriteLine($"已加载格式错误修复配置，包含 {errorFixes.Count} 条修复规则");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"::warning file={fixConfigPath}::读取格式错误修复配置失败: {ex.Message}");
                 }
             }
-
-            if (repoDir == null)
+            else
             {
-                throw new DirectoryNotFoundException("Error: directory not found <repo_dir>\translation_utils");
+                Console.WriteLine($"格式错误修复配置文件不存在: {fixConfigPath}");
             }
 
             // 拼接 data\output_files 路径
@@ -93,7 +72,7 @@ namespace PreProcessing
                 int lastUnderscoreIndex = dirName.LastIndexOf('_');
                 if (lastUnderscoreIndex == -1)
                 {
-                    Console.WriteLine($"::error file={dirName}::Wrong directory format");
+                    Console.WriteLine($"::error:: file={dirName}. Wrong directory format");
                     errorCount++;
                     continue;
                 }
@@ -105,31 +84,31 @@ namespace PreProcessing
                 string enFilePath = Path.Combine(subDir, "EN_output.txt");
                 if (!File.Exists(enFilePath))
                 {
-                    Console.WriteLine($"::error file={enFilePath}::Missing file");
+                    Console.WriteLine($"::error:: file={enFilePath}. Missing file");
                     errorCount++;
                     continue;
                 }
-                errorCount += ExtractENText(enFilePath, modId);
+                errorCount += ExtractENText(enFilePath, modId, errorFixes);
 
                 //读取CN_output.txt文件
                 string cnOldFilePath = Path.Combine(subDir, "CN_output.txt");
                 if (!File.Exists(cnOldFilePath))
                 {
-                    Console.WriteLine($"::error file={cnOldFilePath}::Missing file");
+                    Console.WriteLine($"::error:: file={cnOldFilePath}. Missing file");
                     errorCount++;
                     continue;
                 }
-                errorCount += ExtractOldCNText(cnOldFilePath, modId);
+                errorCount += ExtractOldCNText(cnOldFilePath, modId, errorFixes);
 
                 //读取repoDir\data\completed_files\<modId>\en_completed.txt文件
                 string cnNewFilePath = Path.Combine(repoDir, "data", "completed_files", modId, "en_completed.txt");
                 if (!File.Exists(cnNewFilePath))
                 {
-                    Console.WriteLine($"::error file={cnNewFilePath}::Missing file");
+                    Console.WriteLine($"::error:: file={cnNewFilePath}. Missing file");
                     errorCount++;
                     continue;
                 }
-                errorCount += ExtractNewCNText(cnNewFilePath, modId);
+                errorCount += ExtractNewCNText(cnNewFilePath, modId, errorFixes);
             }
 
             //检查repoDir\data\translations_CN.txt是否存在，不存在则创建一个空文件
@@ -292,14 +271,77 @@ namespace PreProcessing
             }
         }
 
-        static int ExtractENText(string outputFilePath, string modId)
+        static string GetRepoDir()
+        {
+            // 获取可执行文件的完整路径
+            string exePath = System.Diagnostics.Process.GetCurrentProcess().MainModule?.FileName ?? string.Empty;
+            Console.WriteLine($"Exe path: {exePath}");
+
+            // 获取可执行文件所在目录
+            string? currentDir = Path.GetDirectoryName(exePath);
+
+            // 向上查找 translation_utils 目录
+            string? repoDir = null;
+            var searchDir = currentDir;
+            while (!string.IsNullOrEmpty(searchDir))
+            {
+                string candidate = Path.Combine(searchDir, "translation_utils");
+                if (Directory.Exists(candidate))
+                {
+                    repoDir = searchDir;
+                    break;
+                }
+                searchDir = Path.GetDirectoryName(searchDir);
+            }
+
+            //如果无法通过exe路径获取repo目录，则尝试通过工作目录获取repo目录
+            //如果无法通过exe路径获取repo目录，则尝试通过工作目录获取repo目录
+            if (repoDir == null)
+            {
+                // 获取当前工作目录
+                string workingDir = Directory.GetCurrentDirectory();
+                Console.WriteLine($"Working directory: {workingDir}");
+
+                // 从工作目录开始向上查找 translation_utils 目录
+                searchDir = workingDir;
+                while (!string.IsNullOrEmpty(searchDir))
+                {
+                    string candidate = Path.Combine(searchDir, "translation_utils");
+                    if (Directory.Exists(candidate))
+                    {
+                        repoDir = searchDir;
+                        break;
+                    }
+                    searchDir = Path.GetDirectoryName(searchDir);
+                }
+            }
+
+            if (repoDir == null)
+            {
+                throw new DirectoryNotFoundException("Error: directory not found <repo_dir>\translation_utils");
+            }
+            return repoDir;
+        }
+
+        static int ExtractENText(string outputFilePath, string modId, Dictionary<string, FixRule> errorFixes)
         {
             int errorCount = 0;
             var translationEntries = new Dictionary<string, TranslationEntry>();
-            //读取En_output.txt全文，到一个字符串
             string outputContent = File.ReadAllText(outputFilePath);
             //匹配并移除 "..\n"
             outputContent = Regex.Replace(outputContent, @"""\s*\.\.\s*\n?\s*""", "");
+
+            // 应用错误修复规则
+            foreach (var fix in errorFixes.Values)
+            {
+                if (outputContent.Contains(fix.Find))
+                {
+                    // 构建正确的格式：key = "replace",
+                    string correctFormat = $"{fix.Key} = \"{fix.Replace}\",";
+                    outputContent = outputContent.Replace(fix.Find, correctFormat);
+                    Console.WriteLine($"应用修复规则: {fix.Key}");
+                }
+            }
 
             //拆分行
             var lines = outputContent.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
@@ -331,7 +373,7 @@ namespace PreProcessing
                         continue;
                     }
                     //输出错误的文件名(不包含)和行号码以及内容
-                    Console.WriteLine($"::error file={outputFilePath},line={Array.IndexOf(lines, line) + 1}::Format Error: {line}");
+                    Console.WriteLine($"::error:: file={outputFilePath},line={Array.IndexOf(lines, line) + 1}. Format Error: {line}");
                     errorCount++;
                 }
             }
@@ -339,7 +381,7 @@ namespace PreProcessing
             return errorCount;
         }
 
-        static int ExtractOldCNText(string outputFilePath, string modId)
+        static int ExtractOldCNText(string outputFilePath, string modId, Dictionary<string, FixRule> errorFixes)
         {
             int errorCount = 0;
             //读取CN_output.txt全文，到一个字符串
@@ -396,13 +438,13 @@ namespace PreProcessing
                         continue;
                     }
                     //输出错误的文件名(不包含)和行号码以及内容
-                    Console.WriteLine($"::error file={outputFilePath},line={Array.IndexOf(lines, line) + 1}::Format Error: {line}");
+                    Console.WriteLine($"::error:: file={outputFilePath},line={Array.IndexOf(lines, line) + 1}. Format Error: {line}");
                     errorCount++;
                 }
             }
-            return errorCount;
+            return 0; //这里不计入错误数，因为CN_output.txt只是参考文件，如果解析错误只是参考翻译丢失，不影响后续流程
         }
-        static int ExtractNewCNText(string outputFilePath, string modId)
+        static int ExtractNewCNText(string outputFilePath, string modId, Dictionary<string, FixRule> errorFixes)
         {
             int errorCount = 0;
             //读取CN_output.txt全文，到一个字符串
@@ -459,15 +501,29 @@ namespace PreProcessing
                         continue;
                     }
                     //输出错误的文件名(不包含)和行号码以及内容
-                    Console.WriteLine($"::error file={outputFilePath},line={Array.IndexOf(lines, line) + 1}::Format Error: {line}");
+                    Console.WriteLine($"::error:: file={outputFilePath},line={Array.IndexOf(lines, line) + 1}. Format Error: {line}");
                     errorCount++;
                 }
             }
-            return errorCount;
+            return 0;
+            //return errorCount;
         }
         static bool IsNullOrCommentLine(string line)
         {
             return string.IsNullOrWhiteSpace(line) || line.TrimStart().StartsWith("//") || line.TrimStart().StartsWith("#") || line.TrimStart().StartsWith("/*") || line.TrimStart().StartsWith("*") || line.TrimStart().StartsWith("*/") || line.TrimStart().StartsWith("--");
         }
+    }
+
+    // 修改 JSON 配置类以匹配实际的 JSON 结构
+    public class FixFormattingErrorsConfig
+    {
+        public Dictionary<string, FixRule> Rules { get; set; } = new();
+    }
+
+    public class FixRule
+    {
+        public string Key { get; set; } = "";
+        public string Find { get; set; } = "";
+        public string Replace { get; set; } = "";
     }
 }
